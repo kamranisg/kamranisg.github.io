@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Physically Realizable adversarial examples in LiDAR Object Detection | Mohammed Kamran</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Physically Realizable adversarial examples in LiDAR Object Detection" />
+<meta name="author" content="Mohammed Kamran" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In this post, I would be reviewing the Paper Physically Realizable Adversarial Examples for LiDAR Object Detection from James Tu, Mengye Ren, Siva Manivasagam, Ming Liang, Bin Yang, Richard Du, Frank Cheng, Raquel Urtasun." />
+<meta property="og:description" content="In this post, I would be reviewing the Paper Physically Realizable Adversarial Examples for LiDAR Object Detection from James Tu, Mengye Ren, Siva Manivasagam, Ming Liang, Bin Yang, Richard Du, Frank Cheng, Raquel Urtasun." />
+<link rel="canonical" href="http://localhost:4000/misc/2021/05/26/Seminar.html" />
+<meta property="og:url" content="http://localhost:4000/misc/2021/05/26/Seminar.html" />
+<meta property="og:site_name" content="Mohammed Kamran" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-05-26T00:00:00+02:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","headline":"Physically Realizable adversarial examples in LiDAR Object Detection","dateModified":"2021-05-26T00:00:00+02:00","datePublished":"2021-05-26T00:00:00+02:00","url":"http://localhost:4000/misc/2021/05/26/Seminar.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/misc/2021/05/26/Seminar.html"},"author":{"@type":"Person","name":"Mohammed Kamran"},"description":"In this post, I would be reviewing the Paper Physically Realizable Adversarial Examples for LiDAR Object Detection from James Tu, Mengye Ren, Siva Manivasagam, Ming Liang, Bin Yang, Richard Du, Frank Cheng, Raquel Urtasun.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Mohammed Kamran" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Mohammed Kamran</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Blog/">Blog</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Physically Realizable adversarial examples in LiDAR Object Detection</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2021-05-26T00:00:00+02:00" itemprop="datePublished">
+        May 26, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>In this post, I would be reviewing the Paper <a href="https://arxiv.org/abs/2004.00543"> Physically Realizable Adversarial Examples for LiDAR Object Detection </a> from James Tu, Mengye Ren, Siva Manivasagam, Ming Liang, Bin Yang, Richard Du, Frank Cheng, Raquel Urtasun.</p>
+
+<p>This paper was presented in the Conference on Computer Vision and Pattern Recognition (CVPR) in the year 2020.</p>
+
+<p>A presentation for this paper is available <a href="sdf"> here </a></p>
+
+<p>Following are the contents that would be discussed further.</p>
+
+<h3 id="-table-of-contents-"><center> Table of Contents </center></h3>
+
+<center> 1. Introduction    </center>
+<center> 2. Related Work    </center>
+<center> 3. Main Contributions        </center>
+<center> 4. Experimental Setup           </center>
+<center> 5. Results                      </center>
+<center> 6. Conclusion                </center>
+
+<h2 id="-1-introduction"><center> 1. Introduction</center></h2>
+
+<p>We live in a world where humans are an integral part of rapidly emerging technologies and innovations. Something unimaginable a few centuries ago seems today a mere possible task. Innovations in technologies continue to ease the human lifestyle and will continue to do so in the future.</p>
+
+<p>Autonomus driving rely heavily on point cloud data to process and understand the scene in front of them. However, they have been shown to susceptible to adversarial attacks which heavily impacts their accuracy. Before knowing more about various attacks, lets us understand the definition of adversarial attack.</p>
+
+<h4 id="--definition--adversarial-attacks-"><center> <u> Definition : Adversarial Attacks </u></center></h4>
+<p>For a given classifier, we define an adversarial perturbation as the minimal perturbation r that is sufficient to change the estimated label k(x):</p>
+
+<p><img src="/assets/Images/Picture20.png" alt="AI" /></p>
+
+<p>As we can see from the image, just by adding a small pertubation to the image, our machine learning model classifies a panda to be a Gibbon with a high accuracy.</p>
+
+<p><img src="/assets/Images/Picture2.png" alt="AI" /></p>
+
+<p>Thus, we are need of machine learning models that are robust against all kinds of adversarial attacks. This is extremely crucial in Autonoumous driving where safety and human life are at risk.</p>
+
+<p>A brief overview is as follows:</p>
+
+<ol>
+  <li>We try to construct a physically realiazable 3D mesh to placed on top of Roof of a vehicle.</li>
+  <li>We try to minimise the detection score through a loss function.</li>
+  <li>Then evaluation is done against several target models.</li>
+  <li>Finally, a successful defense mechanism is carried using data augmentation.</li>
+</ol>
+
+<h2 id="-2-related-work"><center> 2. Related Work</center></h2>
+
+<p>Lets us discuss a couple of attacks on the state-of-art machine learning models.</p>
+
+<h4 id="--a--image-based-attack-"><center> <u> A.  Image based attack </u></center></h4>
+
+<p>This attack was performed to miscalssify an image of whale. An algorithm called DeepFool <a href="https://arxiv.org/pdf/1511.04599.pdf"> (Seyed et al. 2016) </a>  was proposed to bring about even smaller pertubation than the state-of-art pertubations. Finally the image of whale is wrongly classified as a turtle through the image-based proposed attack. We observe in the image below to achieve 5 times smaller pertubation on LeNet classifier that was trained on MNIST.</p>
+
+<p><img src="/assets/Images/Picture3.jpg" alt="AI" /></p>
+
+<p>However, in autonomous driving scenarios we are more interested in the point cloud data as inputs, rather than 2D flat images.</p>
+
+<h4 id="--b--point-cloud-attack-"><center> <u> B.  Point cloud attack </u></center></h4>
+
+<p>The authors <a href="https://openaccess.thecvf.com/content_CVPR_2019/papers/Xiang_Generating_3D_Adversarial_Point_Clouds_CVPR_2019_paper.pdf"> (Chong Xiang et al. 2019) </a> propesed to generate 3d adversarial point clouds. This attack was performed on the state-of-art model named PointNet that was trained on ModelNet40. The authors proposed 2 different types of attacks, namely Adversarial Point perturbation and Point generation. By randomly shifting some points or adding clusters of points to the input point clouds, the classfication of bottle changes to Chair and Toilet respectively. This shows the vulnerablility of our machine learnig models and the need for robustness.</p>
+
+<p><img src="/assets/Images/Picture5.png" alt="AI" /></p>
+
+<p>The authors claim to achieve a <b> success rate of more than 99% </b> here. However, we need to re-think the nature of attacks. These attacks are actually not practical and do not happen in real-world scenarios such as in autonomous driving</p>
+
+<p><img src="/assets/Images/Picture6.png" alt="AI" /></p>
+
+<h4 id="--c--physical-world-attack-"><center> <u> C.  Physical world attack </u></center></h4>
+
+<p>The authors <a href="https://deepai.org/publication/adversarial-objects-against-lidar-based-autonomous-driving-systems"> (Yulong Cao et al. 2019) </a> proposed LidarAdv which has many <b>similarites </b> to our appraoch.</p>
+
+<p>Firstly, it learns an adversarial mesh that is placeed on the road to fool the Lidar detectors in the autonomus driving vehicles.</p>
+
+<p>Secondly, this is a real world attack. However, it has some key <b>  differences</b> . Firstly it does not interact with real world objects and secondly it deals with only a single frame here.</p>
+
+<p><img src="/assets/Images/Picture7.png" alt="AI" /></p>
+
+<h2 id="-3-main-contributions"><center> 3. Main Contributions</center></h2>
+
+<p>We basically review five major sub-topics that help us understand the attack.</p>
+
+<p><img src="/assets/Images/Picture8.png" alt="AI" /></p>
+
+<h4 id="--1-surface-parametrisation-"><center> <u> 1. Surface Parametrisation </u></center></h4>
+
+<p>We choose to initialize our mesh with an isotropic sphere with 162 vertices and 320 faces and scale by 70cm X 70cm X 50cm. We choose mesh due to its compact representation and precise rendering.</p>
+
+<p><img src="/assets/Images/Picture9.png" alt="AI" /></p>
+
+<h4 id="--2-lidar-point-rendering-"><center> <u> 2. Lidar Point Rendering </u></center></h4>
+
+<p>The we perform lidar point rendering by intersection of Gamma rays with mesh faces using <b> Moller-Trumbore intersection algorithm </b>. Then a union of rendered adversarial points and orginal points is applied to create a modified scene.</p>
+
+<h4 id="--3-rooftop-fitting-"><center> <u> 3. Rooftop fitting </u></center></h4>
+
+<p>We then located the coordinate(position) on the roof of vehicle where the mesh will be placed. We represent the vehicles as Signed distacne functions (SDF’s) and project to a latent space using the Principal Component Analysis (PCA). Then, matching cubes algorithm is applied to obtain a fiited CAD model. Finally, we use the vertices in top 0.2m vertical range to approximate the roof-top region.</p>
+
+<p><img src="/assets/Images/Picture10.png" alt="AI" /></p>
+
+<h4 id="--4-loss-function-"><center> <u> 4. Loss Function </u></center></h4>
+
+<p>The authors proposed a combiantion of adversarial loss and laplacian loss. Here we care of the relevant bounding box proposals.ie;</p>
+
+<ol>
+  <li>The confidence score must be &gt; 0.1</li>
+  <li>The IoU(Intersection over Union) with ground truth bounding box should be greater than 0.1</li>
+</ol>
+
+<p>Our loss try to minimize the <b> confidence </b> of the relevant candidates. For this, binary cross entropy is taken into account with respect to the weighing factor of IoU.</p>
+
+<p><img src="/assets/Images/Picture23.png" alt="AI" /></p>
+
+<p><img src="/assets/Images/Picture24.png" alt="AI" /></p>
+
+<p>Finally, the laplacian loss is used as a regulariser to maintain the surface smoothness of the mesh</p>
+
+<h4 id="--5-attack-algorithms-"><center> <u> 5. Attack Algorithms </u></center></h4>
+
+<ol>
+  <li>White Box attcks
+    <ul>
+      <li>Knowledge of model architectures</li>
+      <li>Gradient of loss wrt mesh vertices</li>
+      <li>Projected Gradient Descent</li>
+    </ul>
+  </li>
+  <li>Black box attacks
+    <ul>
+      <li>Non-differentiable pre-processing stages</li>
+      <li>PIXOR has occupancy voxels</li>
+      <li>Genetic algorithm (Mutation and Crossover)</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="-4-experimental-setup"><center> 4. Experimental setup</center></h2>
+
+<p>A. Dataset</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>KITTI (car class only)
+</code></pre></div></div>
+
+<p>B. Sensor</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Velodyne HDL-64E
+</code></pre></div></div>
+
+<p>C. Target models</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. PIXOR
+2. PIXOR(d)
+3. PointRCNN
+4. PointPillar
+</code></pre></div></div>
+
+<h2 id="-5-results"><center> 5. Results</center></h2>
+
+<p>The authors proposed to use 2 different evaluation metrics to see the performance of the attacks.</p>
+
+<h4 id="--1-attack-success-rate-"><center> <u> 1. Attack Success rate: </u></center></h4>
+
+<p>This metric evaluate the percentage at the target vehicle is successfully detected originally but not detected after the attack. For eg. if the ASR is 80%, this means in 80% of cases the vehicle was not detected after the attack has been made. We take a benchmark IoU greater than 0.7 to assert the detection of vehicles.</p>
+
+<h4 id="--a-attack-transferability-in-similar-models-"><center> <u> A. Attack transferability in similar models </u></center></h4>
+
+<p>Here two variants of PIXOR is trained using differenct seeds to learn an adversarial mesh separately. The table reflects a high degree of transferability across models with identical architecture.</p>
+
+<p><img src="/assets/Images/Picture13.png" alt="AI" /></p>
+
+<h4 id="--b-attack-transferability-across-different-architectures-"><center> <u> B. Attack transferability across different architectures </u></center></h4>
+
+<p>Here attack transferabilty is performed across all 4 model architectures. We observe that attacks from PointRCNN and PointPillar used to attack PIXOR and PIXOR(d), and not vice versa. This is mainly due to the additional point-level reasoning employed in the PointRCNN and PointPillar.</p>
+
+<p><img src="/assets/Images/Picture14.png" alt="AI" /></p>
+
+<h4 id="--2-recall-iou-curve-"><center> <u> 2. Recall-IoU curve: </u></center></h4>
+
+<p>This curve basically measures the impact of recall percentage at a range of IoU threshold.</p>
+
+<h4 id="--a-recall-iou-curve-pixord-"><center> <u> A. Recall-IoU curve (PIXOR(d)) </u></center></h4>
+
+<p>As seen from the curve, we plot Recall-IoU for four different attacks at various IoU thresholds. We see a drop in initial recall due to more False negatives in our detections. This can be seen in both white and black box attacks. We also observe a similar performance in both of them.</p>
+
+<p><img src="/assets/Images/Picture15.png" alt="AI" /></p>
+
+<h4 id="---b-recall-iou-curve-all-4-models-"><center>  <u> B. Recall-IoU curve (All 4 models) </u></center></h4>
+
+<p>We evaluate the performance on the curve against all four target models individually. We observe that PIXOR models are less robust. This is mainly due to the input representaion as they convert point cloud to voxels and remove much information. The attack seems weaker on PointRCNN as PointRCNN treats every point as a bounding box anchor. To understand the authors proposed to visualze the 
+Attack Success rate at various location in the scene using different detector models.</p>
+
+<p><img src="/assets/Images/Picture16.png" alt="AI" /></p>
+
+<p>Thus vehicles close to sensor register more LiDAR points making it extremely difficult to suppress all proposals. This proves the fact that PointRCNN is more robust against attack near Lidar sensor and less robust as we increase distance from lidar sensor and visualize less points subsequently.</p>
+
+<h4 id="--3-a-realistic-experiment--"><center> <u> 3. A realistic experiment: </u> </center></h4>
+
+<p>Here adversaries are learned using common objects. Six objects such as couch,chair,table,bike,canoe, cabinet are taken from ShapeNet.</p>
+
+<p><img src="/assets/Images/Picture18.png" alt="AI" /></p>
+
+<p>The main goal was to learn a universal adversary on account we do not pertubate much so as to resemle the commmon object. From the table we seem to achieve a significantly higher attack success rate on all the common shapes. This prover the vulnerabilities of our classifiers.</p>
+
+<h4 id="--4-defense-mechanism--"><center> <u> 4. Defense mechanism </u> </center></h4>
+
+<p>A defense mechanism is employed by re-training PIXOR model with random data augmentation and adversarial training.</p>
+
+<p><img src="/assets/Images/Picture19.png" alt="AI" /></p>
+
+<p>We can observer a drop in the attack success rate percentage after augmentation and Adv. training.</p>
+
+<h2 id="-6--conclusion-"><center> 6.  Conclusion </center></h2>
+
+<p>The field of autonomous driving tremendously requries the need of robust and critical systems. This is pertinent when lives of people are stake. 
+Current state-of-art are vulnearable to adverarial attacks and work in the way to improve them requires significant research.</p>
+
+<p>The authors here in this paper propose a robust, universal, and physical realizable adversarial examples capable of hiding vehicles from LiDAR detectors. This achieves an attack success rate of 80% at IoU of 0.7 with a strong Lidar detector. Although our defense mechanism from Data augmentation and adversarial are strong, but are not 100% secure against adversarial attacks.</p>
+
+<p>It becomes very easy for an attacker to just 3d print the mesh and place on the rooftop of a vechicle to minimise the detection score. Thus, we emphasise the need for more robust models in the context for autonomous driving.</p>
+
+  </div><a class="u-url" href="/misc/2021/05/26/Seminar.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Mohammed Kamran</li>
+          <li><a class="u-email" href="mailto:m.kamran@tum.de">m.kamran@tum.de</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>Welcome to my Little Space</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://www.facebook.com/kamranisg" title="kamranisg"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#facebook"></use></svg></a></li><li><a rel="me" href="https://github.com/kamranisg" title="kamranisg"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/kamran-isg" title="kamran-isg"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li><li><a rel="me" href="https://twitter.com/kamranisg" title="kamranisg"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-28T08:25:49+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Mohammed Kamran</title><subtitle>Welcome to my Little Space</subtitle><author><name>Mohammed Kamran</name><email>m.kamran@tum.de</email></author><entry><title type="html">Physically Realizable adversarial examples in LiDAR Object Detection</title><link href="http://localhost:4000/misc/2021/05/26/Seminar.html" rel="alternate" type="text/html" title="Physically Realizable adversarial examples in LiDAR Object Detection" /><published>2021-05-26T00:00:00+02:00</published><updated>2021-05-26T00:00:00+02:00</updated><id>http://localhost:4000/misc/2021/05/26/Seminar</id><content type="html" xml:base="http://localhost:4000/misc/2021/05/26/Seminar.html">&lt;p&gt;In this post, I would be reviewing the Paper &lt;a href=&quot;https://arxiv.org/abs/2004.00543&quot;&gt; Physically Realizable Adversarial Examples for LiDAR Object Detection &lt;/a&gt; from James Tu, Mengye Ren, Siva Manivasagam, Ming Liang, Bin Yang, Richard Du, Frank Cheng, Raquel Urtasun.&lt;/p&gt;
+
+&lt;p&gt;This paper was presented in the Conference on Computer Vision and Pattern Recognition (CVPR) in the year 2020.&lt;/p&gt;
+
+&lt;p&gt;A presentation for this paper is available &lt;a href=&quot;sdf&quot;&gt; here &lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Following are the contents that would be discussed further.&lt;/p&gt;
+
+&lt;h3 id=&quot;-table-of-contents-&quot;&gt;&lt;center&gt; Table of Contents &lt;/center&gt;&lt;/h3&gt;
+
+&lt;center&gt; 1. Introduction    &lt;/center&gt;
+&lt;center&gt; 2. Related Work    &lt;/center&gt;
+&lt;center&gt; 3. Main Contributions        &lt;/center&gt;
+&lt;center&gt; 4. Experimental Setup           &lt;/center&gt;
+&lt;center&gt; 5. Results                      &lt;/center&gt;
+&lt;center&gt; 6. Conclusion                &lt;/center&gt;
+
+&lt;h2 id=&quot;-1-introduction&quot;&gt;&lt;center&gt; 1. Introduction&lt;/center&gt;&lt;/h2&gt;
+
+&lt;p&gt;We live in a world where humans are an integral part of rapidly emerging technologies and innovations. Something unimaginable a few centuries ago seems today a mere possible task. Innovations in technologies continue to ease the human lifestyle and will continue to do so in the future.&lt;/p&gt;
+
+&lt;p&gt;Autonomus driving rely heavily on point cloud data to process and understand the scene in front of them. However, they have been shown to susceptible to adversarial attacks which heavily impacts their accuracy. Before knowing more about various attacks, lets us understand the definition of adversarial attack.&lt;/p&gt;
+
+&lt;h4 id=&quot;--definition--adversarial-attacks-&quot;&gt;&lt;center&gt; &lt;u&gt; Definition : Adversarial Attacks &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+&lt;p&gt;For a given classifier, we define an adversarial perturbation as the minimal perturbation r that is sufficient to change the estimated label k(x):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture20.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As we can see from the image, just by adding a small pertubation to the image, our machine learning model classifies a panda to be a Gibbon with a high accuracy.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture2.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Thus, we are need of machine learning models that are robust against all kinds of adversarial attacks. This is extremely crucial in Autonoumous driving where safety and human life are at risk.&lt;/p&gt;
+
+&lt;p&gt;A brief overview is as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;We try to construct a physically realiazable 3D mesh to placed on top of Roof of a vehicle.&lt;/li&gt;
+  &lt;li&gt;We try to minimise the detection score through a loss function.&lt;/li&gt;
+  &lt;li&gt;Then evaluation is done against several target models.&lt;/li&gt;
+  &lt;li&gt;Finally, a successful defense mechanism is carried using data augmentation.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;-2-related-work&quot;&gt;&lt;center&gt; 2. Related Work&lt;/center&gt;&lt;/h2&gt;
+
+&lt;p&gt;Lets us discuss a couple of attacks on the state-of-art machine learning models.&lt;/p&gt;
+
+&lt;h4 id=&quot;--a--image-based-attack-&quot;&gt;&lt;center&gt; &lt;u&gt; A.  Image based attack &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;This attack was performed to miscalssify an image of whale. An algorithm called DeepFool &lt;a href=&quot;https://arxiv.org/pdf/1511.04599.pdf&quot;&gt; (Seyed et al. 2016) &lt;/a&gt;  was proposed to bring about even smaller pertubation than the state-of-art pertubations. Finally the image of whale is wrongly classified as a turtle through the image-based proposed attack. We observe in the image below to achieve 5 times smaller pertubation on LeNet classifier that was trained on MNIST.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture3.jpg&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;However, in autonomous driving scenarios we are more interested in the point cloud data as inputs, rather than 2D flat images.&lt;/p&gt;
+
+&lt;h4 id=&quot;--b--point-cloud-attack-&quot;&gt;&lt;center&gt; &lt;u&gt; B.  Point cloud attack &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;The authors &lt;a href=&quot;https://openaccess.thecvf.com/content_CVPR_2019/papers/Xiang_Generating_3D_Adversarial_Point_Clouds_CVPR_2019_paper.pdf&quot;&gt; (Chong Xiang et al. 2019) &lt;/a&gt; propesed to generate 3d adversarial point clouds. This attack was performed on the state-of-art model named PointNet that was trained on ModelNet40. The authors proposed 2 different types of attacks, namely Adversarial Point perturbation and Point generation. By randomly shifting some points or adding clusters of points to the input point clouds, the classfication of bottle changes to Chair and Toilet respectively. This shows the vulnerablility of our machine learnig models and the need for robustness.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture5.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The authors claim to achieve a &lt;b&gt; success rate of more than 99% &lt;/b&gt; here. However, we need to re-think the nature of attacks. These attacks are actually not practical and do not happen in real-world scenarios such as in autonomous driving&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture6.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;--c--physical-world-attack-&quot;&gt;&lt;center&gt; &lt;u&gt; C.  Physical world attack &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;The authors &lt;a href=&quot;https://deepai.org/publication/adversarial-objects-against-lidar-based-autonomous-driving-systems&quot;&gt; (Yulong Cao et al. 2019) &lt;/a&gt; proposed LidarAdv which has many &lt;b&gt;similarites &lt;/b&gt; to our appraoch.&lt;/p&gt;
+
+&lt;p&gt;Firstly, it learns an adversarial mesh that is placeed on the road to fool the Lidar detectors in the autonomus driving vehicles.&lt;/p&gt;
+
+&lt;p&gt;Secondly, this is a real world attack. However, it has some key &lt;b&gt;  differences&lt;/b&gt; . Firstly it does not interact with real world objects and secondly it deals with only a single frame here.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture7.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;-3-main-contributions&quot;&gt;&lt;center&gt; 3. Main Contributions&lt;/center&gt;&lt;/h2&gt;
+
+&lt;p&gt;We basically review five major sub-topics that help us understand the attack.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture8.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;--1-surface-parametrisation-&quot;&gt;&lt;center&gt; &lt;u&gt; 1. Surface Parametrisation &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;We choose to initialize our mesh with an isotropic sphere with 162 vertices and 320 faces and scale by 70cm X 70cm X 50cm. We choose mesh due to its compact representation and precise rendering.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture9.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;--2-lidar-point-rendering-&quot;&gt;&lt;center&gt; &lt;u&gt; 2. Lidar Point Rendering &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;The we perform lidar point rendering by intersection of Gamma rays with mesh faces using &lt;b&gt; Moller-Trumbore intersection algorithm &lt;/b&gt;. Then a union of rendered adversarial points and orginal points is applied to create a modified scene.&lt;/p&gt;
+
+&lt;h4 id=&quot;--3-rooftop-fitting-&quot;&gt;&lt;center&gt; &lt;u&gt; 3. Rooftop fitting &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;We then located the coordinate(position) on the roof of vehicle where the mesh will be placed. We represent the vehicles as Signed distacne functions (SDF’s) and project to a latent space using the Principal Component Analysis (PCA). Then, matching cubes algorithm is applied to obtain a fiited CAD model. Finally, we use the vertices in top 0.2m vertical range to approximate the roof-top region.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture10.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;--4-loss-function-&quot;&gt;&lt;center&gt; &lt;u&gt; 4. Loss Function &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;The authors proposed a combiantion of adversarial loss and laplacian loss. Here we care of the relevant bounding box proposals.ie;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The confidence score must be &amp;gt; 0.1&lt;/li&gt;
+  &lt;li&gt;The IoU(Intersection over Union) with ground truth bounding box should be greater than 0.1&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Our loss try to minimize the &lt;b&gt; confidence &lt;/b&gt; of the relevant candidates. For this, binary cross entropy is taken into account with respect to the weighing factor of IoU.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture23.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture24.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Finally, the laplacian loss is used as a regulariser to maintain the surface smoothness of the mesh&lt;/p&gt;
+
+&lt;h4 id=&quot;--5-attack-algorithms-&quot;&gt;&lt;center&gt; &lt;u&gt; 5. Attack Algorithms &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;White Box attcks
+    &lt;ul&gt;
+      &lt;li&gt;Knowledge of model architectures&lt;/li&gt;
+      &lt;li&gt;Gradient of loss wrt mesh vertices&lt;/li&gt;
+      &lt;li&gt;Projected Gradient Descent&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Black box attacks
+    &lt;ul&gt;
+      &lt;li&gt;Non-differentiable pre-processing stages&lt;/li&gt;
+      &lt;li&gt;PIXOR has occupancy voxels&lt;/li&gt;
+      &lt;li&gt;Genetic algorithm (Mutation and Crossover)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;-4-experimental-setup&quot;&gt;&lt;center&gt; 4. Experimental setup&lt;/center&gt;&lt;/h2&gt;
+
+&lt;p&gt;A. Dataset&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;KITTI (car class only)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;B. Sensor&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Velodyne HDL-64E
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;C. Target models&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1. PIXOR
+2. PIXOR(d)
+3. PointRCNN
+4. PointPillar
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;-5-results&quot;&gt;&lt;center&gt; 5. Results&lt;/center&gt;&lt;/h2&gt;
+
+&lt;p&gt;The authors proposed to use 2 different evaluation metrics to see the performance of the attacks.&lt;/p&gt;
+
+&lt;h4 id=&quot;--1-attack-success-rate-&quot;&gt;&lt;center&gt; &lt;u&gt; 1. Attack Success rate: &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;This metric evaluate the percentage at the target vehicle is successfully detected originally but not detected after the attack. For eg. if the ASR is 80%, this means in 80% of cases the vehicle was not detected after the attack has been made. We take a benchmark IoU greater than 0.7 to assert the detection of vehicles.&lt;/p&gt;
+
+&lt;h4 id=&quot;--a-attack-transferability-in-similar-models-&quot;&gt;&lt;center&gt; &lt;u&gt; A. Attack transferability in similar models &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;Here two variants of PIXOR is trained using differenct seeds to learn an adversarial mesh separately. The table reflects a high degree of transferability across models with identical architecture.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture13.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;--b-attack-transferability-across-different-architectures-&quot;&gt;&lt;center&gt; &lt;u&gt; B. Attack transferability across different architectures &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;Here attack transferabilty is performed across all 4 model architectures. We observe that attacks from PointRCNN and PointPillar used to attack PIXOR and PIXOR(d), and not vice versa. This is mainly due to the additional point-level reasoning employed in the PointRCNN and PointPillar.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture14.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;--2-recall-iou-curve-&quot;&gt;&lt;center&gt; &lt;u&gt; 2. Recall-IoU curve: &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;This curve basically measures the impact of recall percentage at a range of IoU threshold.&lt;/p&gt;
+
+&lt;h4 id=&quot;--a-recall-iou-curve-pixord-&quot;&gt;&lt;center&gt; &lt;u&gt; A. Recall-IoU curve (PIXOR(d)) &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;As seen from the curve, we plot Recall-IoU for four different attacks at various IoU thresholds. We see a drop in initial recall due to more False negatives in our detections. This can be seen in both white and black box attacks. We also observe a similar performance in both of them.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture15.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;---b-recall-iou-curve-all-4-models-&quot;&gt;&lt;center&gt;  &lt;u&gt; B. Recall-IoU curve (All 4 models) &lt;/u&gt;&lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;We evaluate the performance on the curve against all four target models individually. We observe that PIXOR models are less robust. This is mainly due to the input representaion as they convert point cloud to voxels and remove much information. The attack seems weaker on PointRCNN as PointRCNN treats every point as a bounding box anchor. To understand the authors proposed to visualze the 
+Attack Success rate at various location in the scene using different detector models.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture16.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Thus vehicles close to sensor register more LiDAR points making it extremely difficult to suppress all proposals. This proves the fact that PointRCNN is more robust against attack near Lidar sensor and less robust as we increase distance from lidar sensor and visualize less points subsequently.&lt;/p&gt;
+
+&lt;h4 id=&quot;--3-a-realistic-experiment--&quot;&gt;&lt;center&gt; &lt;u&gt; 3. A realistic experiment: &lt;/u&gt; &lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;Here adversaries are learned using common objects. Six objects such as couch,chair,table,bike,canoe, cabinet are taken from ShapeNet.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture18.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The main goal was to learn a universal adversary on account we do not pertubate much so as to resemle the commmon object. From the table we seem to achieve a significantly higher attack success rate on all the common shapes. This prover the vulnerabilities of our classifiers.&lt;/p&gt;
+
+&lt;h4 id=&quot;--4-defense-mechanism--&quot;&gt;&lt;center&gt; &lt;u&gt; 4. Defense mechanism &lt;/u&gt; &lt;/center&gt;&lt;/h4&gt;
+
+&lt;p&gt;A defense mechanism is employed by re-training PIXOR model with random data augmentation and adversarial training.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/Images/Picture19.png&quot; alt=&quot;AI&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We can observer a drop in the attack success rate percentage after augmentation and Adv. training.&lt;/p&gt;
+
+&lt;h2 id=&quot;-6--conclusion-&quot;&gt;&lt;center&gt; 6.  Conclusion &lt;/center&gt;&lt;/h2&gt;
+
+&lt;p&gt;The field of autonomous driving tremendously requries the need of robust and critical systems. This is pertinent when lives of people are stake. 
+Current state-of-art are vulnearable to adverarial attacks and work in the way to improve them requires significant research.&lt;/p&gt;
+
+&lt;p&gt;The authors here in this paper propose a robust, universal, and physical realizable adversarial examples capable of hiding vehicles from LiDAR detectors. This achieves an attack success rate of 80% at IoU of 0.7 with a strong Lidar detector. Although our defense mechanism from Data augmentation and adversarial are strong, but are not 100% secure against adversarial attacks.&lt;/p&gt;
+
+&lt;p&gt;It becomes very easy for an attacker to just 3d print the mesh and place on the rooftop of a vechicle to minimise the detection score. Thus, we emphasise the need for more robust models in the context for autonomous driving.&lt;/p&gt;</content><author><name>Mohammed Kamran</name><email>m.kamran@tum.de</email></author><summary type="html">In this post, I would be reviewing the Paper Physically Realizable Adversarial Examples for LiDAR Object Detection from James Tu, Mengye Ren, Siva Manivasagam, Ming Liang, Bin Yang, Richard Du, Frank Cheng, Raquel Urtasun.</summary></entry><entry><title type="html">Role of Artificial Intelligence in Future Technology</title><link href="http://localhost:4000/misc/2019/10/20/Role-of-Artificial-Intelligence-in-Future-Technology-Copy.html" rel="alternate" type="text/html" title="Role of Artificial Intelligence in Future Technology" /><published>2019-10-20T00:00:00+02:00</published><updated>2019-10-20T00:00:00+02:00</updated><id>http://localhost:4000/misc/2019/10/20/Role-of-Artificial-Intelligence-in-Future-Technology%20-%20Copy</id><content type="html" xml:base="http://localhost:4000/misc/2019/10/20/Role-of-Artificial-Intelligence-in-Future-Technology-Copy.html">&lt;p&gt;We live in a world where humans are an integral part of rapidly emerging technologies and innovations. Something unimaginable a few centuries ago seems today a mere possible task. Innovations in technologies continue to ease the human lifestyle and will continue to do so in the future. Futurist Ray Kurzweil in 2005 predicted the emergence of the “GNR revolution” comprising of Genetics, Nanotechnology, and Robotics with robotics the most important one [1].&lt;/p&gt;
+
+&lt;p&gt;Of course, one such field is Artificial Intelligence that has had a significant impact on humans over time. As defined, Artificial Intelligence is the ability of a computer program or a machine to think and learn [2]. Owing to modern history, the British Mathematician and Logician, Alan Turing, a man well ahead of his time had predicted an era where computers would think like humans. His famous article “Computing Machinery and Intelligence” inspired the works of Allen NexWell and Herbert Simon who first coined the term AI and whose machines developed programs that proved mathematical theorems and solved complex problems in algebra [3]. This feat saw enormous funding from US governments starting from the 1960s. However, the field of AI suffered from the Lighthill report and the Mansfield amendment in 1969 that stated the unproductiveness of Al projects. This led to an era of reduced funding popularly known as “AI winters” [4]. The expansion of expert systems in 1984 motivated investors to fund AI projects. By 1985 AI had become a 1 billion dollar market. Also, following the defeat of world champion Gary Kasparov against the Deep Blue chess computer of IBM, interest in AI soared hugely [5].&lt;/p&gt;
+
+&lt;p&gt;Artificial Intelligence has copious applications, but healthcare stands out as an astounding investment in profiting organizations and aiding individuals as a whole. The ever-growing number of diseases, shortage of skilled medical doctors and a dearth of cheap healthcare have been overcome from affordable solutions that AI comes with. One of the primary challenges that AI has deciphered in recent times if of understanding medical information efficiently. Physicians can now convey faster and errorless treatment by analyzing medical data from laboratories, images from ct- scans and prescribe concise medicines to individuals. One such innovation in the field of Ultrasound imaging that dramatically sped up the diagnostic process is the emergence of a portable ultrasound device called IQ Probe developed by Butterfly Network [6]. By bringing a new era to medical imaging, IQ Probe has replaced the traditional piezoelectric crystal with a single silicon chip. It uses deep learning techniques by adding a layer of artificial intelligence that hugely benefits radiologists in diagnosing Hydronephrosis in kidney, Skin cancers to Tumors in the neck [7]. Being approved by the FDA for 13 various medical applications, the IQ probe has remarkably assisted untrained users to perform self ultrasound diagnosis of their own entire body and reduce the risk associated with image interpretation [8].&lt;/p&gt;
+
+&lt;p&gt;The use of AI in the healthcare industry to provide cost-effective and accurate solutions to patients has been a boon in recent times. For example, Baidu’s AI camera launched by Baidu and Sun Yat-Sen University detected eye diseases with a simple eye scan [9]. Owing to the lack of skilled ophthalmologists, these AI-run devices have reduced the need to work on several medical data by diagnosing three different fundus disorders, namely Diabetic Retinopathy, Glaucoma, and Macular Degeneration, all of which are main causes of blindness [10]. Not surprisingly, Google AI, the world’s leading tech giant has emerged a leading researcher in medicine from aiding pathologists in detecting cancer to diagnosing diabetic eye disease. S.M.I.L.Y., Similar Medical Images Like Yours, is one of its kind by employing a deep-learning-based reverse image search tool to explore large histopathology datasets and improve the life expectancy of humans [11].&lt;/p&gt;
+
+&lt;p&gt;The science fiction novels like 2001: A Space Odyssey and The Guardians of Time, AI has now become a part and parcel of world’s top tech businesses [12]. We have come a long way from RoboCop (1987), featuring Peter Weller to Wally Phister’s Transcendence in 2014 [13]. AI has contributed remarkably in space industry too. Interestingly, Space X, a private US aerospace manufacturer founded by Elon Musk flew a falcon craft carrying a spherical AI bot named Cimon, a mouse, and coffee for the crew members of the International Space Station [14]. Intel and NASA collaboratively found Nervana, a deep learning accelerator project aimed at predicting the sun’s nature towards earth atmosphere and improve the accuracy of images from the moon by five times [15]. As an application, Military systems of tomorrow would also depend on AI as a backbone on the battlefield. In a controversial project, Google’s Maven in 2017, used computer vision algorithms to improve drone striking features of U.S. defence department [16].&lt;/p&gt;
+
+&lt;p&gt;With a varied range of applications that shape and make our lives easier, AI also comes with quite several disadvantages. Replacements of jobs by AI robots have become a common trend with about 60 percent of occupations estimated to be automated by 2030 [17]. In an another example, 34 employees at Fukoko Mutual Life Insurance in Japan lost jobs to artificial machines that automated basic tasks of collecting medical data and reading certificates, eventually saving an estimated 140 million yen [18]. Another challenge that AI faces today is the lack of making good judgment calls. During a shootout in Sydney, numerous people contacted Uber at the same time, resulting in higher fares and thereby leaving no concessions to them [19]. It does not seem to be surprising that technological advancement comes with its own promises and perils. Today, Artificial Intelligence is seen as a growing field in need of significant amount of research. It would be wise to hope that the major contributor in future technology would be none other than Artificial Intelligence.&lt;/p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References:&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;https://en.wikipedia.org/wiki/Artificial_intelligence&lt;/li&gt;
+  &lt;li&gt;https://simple.m.wikipedia.org/wiki/Artificial_intelligence&lt;/li&gt;
+  &lt;li&gt;A.M. Turing; Computing Machinery and Intelligence, Mind 49; 433-460; 1950.&lt;/li&gt;
+  &lt;li&gt;https://en.wikipedia.org/wiki/AI_winter&lt;/li&gt;
+  &lt;li&gt;“Kasparov vs. Deep Blue, The Match That Changed History”, Chesscom, October 12, 2018.&lt;/li&gt;
+  &lt;li&gt;https://www.butterflynetwork.com/iq&lt;/li&gt;
+  &lt;li&gt;Rich Haridy, “Pocket-sized, affordably-priced ultrasound connects to an iPhone”,
+New Atlas, October 30, 2017.&lt;/li&gt;
+  &lt;li&gt;Kevin Seals, “Ultrasound-on-a-chip supercharged with AI: The most disruptive technology in radiology?”,
+Medium, December 7, 2017.&lt;/li&gt;
+  &lt;li&gt;Xinhua, “AI deployed to prevent blindness in China”,
+XINHUANET, January 10, 2019.&lt;/li&gt;
+  &lt;li&gt;Dean Koh, “Chinese Hospital in Guangdong gets AI cameras to detect blindness-causing diseases”,
+      HealthcareITNews, January 14, 2019.&lt;/li&gt;
+  &lt;li&gt;Narayan Hegde, Jason D. Hipp, Yun Liu; “Similar Image search for histopathology: SMILY”, 
+  Nature, June 21, 2019.&lt;/li&gt;
+  &lt;li&gt;Sassa Mifrass, “Best Artificial Intelligence books”, Goodreads, July 31, 2008.&lt;/li&gt;
+  &lt;li&gt;Anubhav Tyagi, “10 Best Movies about Artificial Intelligence That You Must Watch”,
+  Techworm, January 9, 2019.&lt;/li&gt;
+  &lt;li&gt;Marcia Dunn, “SpaceX launches AI robot, strong coffee for station crew”, PhySorg, June 29, 2018.&lt;/li&gt;
+  &lt;li&gt;Shashi Jain, Katie Fritsch, “Prospecting for Space resources with Intel Nervana”, Intel.&lt;/li&gt;
+  &lt;li&gt;Lee Fang, “Google continues investments in military and police AI Technology through venture capital arm”,
+  The Intercept, July 24, 2019.&lt;/li&gt;
+  &lt;li&gt;McKinsey Global Institute, “Jobs Lost, Jobs Gained: Workforce Transitions in a time of automation”, December 2017.&lt;/li&gt;
+  &lt;li&gt;“Artificial Intelligence: The Advantages and Disadvantages”, Arrkgroup, February 6, 2017.&lt;/li&gt;
+  &lt;li&gt;Danny Vinik, “Uber’s Prices Surged in Sydney During the Hostage Crisis, and Everyone Is Furious”,
+  The New Republic, December 15, 2014.&lt;/li&gt;
+&lt;/ol&gt;</content><author><name>Mohammed Kamran</name><email>m.kamran@tum.de</email></author><summary type="html">We live in a world where humans are an integral part of rapidly emerging technologies and innovations. Something unimaginable a few centuries ago seems today a mere possible task. Innovations in technologies continue to ease the human lifestyle and will continue to do so in the future. Futurist Ray Kurzweil in 2005 predicted the emergence of the “GNR revolution” comprising of Genetics, Nanotechnology, and Robotics with robotics the most important one [1].</summary></entry></feed>
