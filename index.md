@@ -11,9 +11,7 @@ layout: home
 
 
 
-I am an MSc. Student in Computer Science at the [Technical University of Munich](https://www.tum.de/en/), Germany. My research interests lie at the intersection of Deep learning and Computer Vision. In particular, I enjoy working on **Image-based 3D reconstruction** and **Optical Flow Estimation methods**. Recently I developed a growing interest in **Vision-based Navigation for Autonomous Systems** with a focus in Robotics.
-
-This Summer, I completed my A1 level of Deutsch with [TUM Sprachenzentrum](https://www.sprachenzentrum.tum.de/startseite/). Apart from work, I enjoy smashing shuttles in badminton courts or making a Jog outdoors. I am learning to improve on the Japanese concept of [Slow Jogging](https://www.youtube.com/watch?v=-4lCJGCkjR8) that works like charm. 
+I am an MSc. Student in Computer Science at the [Technical University of Munich](https://www.tum.de/en/), Germany. My research interests lie at the intersection of Deep learning and Computer Vision. 
 
 I can be reached at *m.kamran* at *tum* dot *de*.
 
